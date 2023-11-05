@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./libs/d3.js"></script>
+    <script src="./libs/d3jstopojson.v1.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>World Map Viz</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="heading1">CO2 Emissions World Wide</h1>
+            <h3 class="heading2">A project by Rahul Manjunath and Amith</h3>
+        </div>
+        <div class="viz_container">
+            <div class="chloro">
+                <h3>This is geojson viz</h3>
+                <div class="map"></div>
+                <div class="slider-container">
+                    <input type="number" id="yearSlider" min="1750" max="2020" value="1750" step="1">
+                </div>
+            </div>
+        </div>
+        <div class="eachCountry">
+            <h3>This is each country trend viz</h3>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
