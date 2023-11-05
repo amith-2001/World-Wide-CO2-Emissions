@@ -31,7 +31,7 @@
 }
 
 .slider-container {
-    display: flex;
+    display: row;
     align-items: center;
     flex-direction: column;
 }
