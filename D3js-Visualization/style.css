@@ -1,3 +1,17 @@
+#tooltip_1{
+    position: fixed;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    width: auto;
+    padding: 10px;
+    background: white;
+    font-family: sans-serif;
+    font-size: medium;
+    border-radius: 2px;
+    line-height: 1;
+}
+
 .container{
     display: flex;
     flex-direction: column;
@@ -23,6 +37,18 @@
     align-items: center;
 }
 
+.chloro, .eachCountry, .worldTrend, .eachYear {
+    border: 1px solid #333;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.chloro h3, .eachCountry h3, .worldTrend h3, .eachYear h3 {
+    font-size: 1.2em;
+}
+  
+
 .chloro{
     display: flex;
     flex-direction: column;
@@ -33,11 +59,7 @@
 .slider-container {
     display: flex;
     align-items: center;
-    flex-direction: row;
-}
-
-.year-display {
-    font-size: 24px;
+    justify-content: center;
 }
 
 #yearSlider {
@@ -47,7 +69,8 @@
     border-radius: 5px;
     font-size: 16px;
     text-align: center;
-    margin-left: 10px;
+    margin: 10px;
+    margin-top: 0px;
     background-color: #f0f0f0; 
     color: #333;
 }
@@ -55,6 +78,20 @@
 #yearSlider:focus {
     outline: none; 
     border: 1px solid #007BFF; 
+}
+
+#animateButton {
+    width: 80px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+    margin: 10px;
+    margin-top: 0px;
+    background-color: rgb(24, 206, 145); 
+    color: #333;
+    cursor: pointer;
 }
 
 path {
