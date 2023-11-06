@@ -31,9 +31,9 @@
 }
 
 .slider-container {
-    display: row;
+    display: flex;
     align-items: center;
-    flex-direction: column;
+    flex-direction: row;
 }
 
 .year-display {
