@@ -16,24 +16,26 @@
         </div>
         <div class="viz_container">
             <div class="chloro">
-                <h3>This is geojson viz</h3>
+                <h3>Choropleth Visualization</h3>
                 <div id="tooltip_1"></div>
                 <div class="map"></div>
-                <div class="slider-container">
-                    <input type="number" id="yearSlider" min="1750" max="2020" value="1750" step="1">
-                    <button id="animateButton">Animate</button>
-                </div>
+                <p id="legend">Low to High</p>
             </div>
+            <div class="eachYear">
+                <h3 id="countryHeading">CO2 emissions by top-10 countries in 1750</h3>
+                <svg id="chart"></svg>
+            </div>
+        </div>
+        <div class="slider-container">
+            <input type="number" id="yearSlider" min="1750" max="2020" value="1750" step="1">
+            <button id="animateButton">Animate</button>
+        </div>
+        <div class="viz_container">
             <div class="eachCountry">
                 <h3>This is each country trend viz</h3>
             </div>
-        </div>
-        <div class="viz_container">
             <div class="worldTrend">
                 <h3>This is total world CO2 emissions viz</h3>
-            </div>
-            <div class="eachYear">
-                <h3>This is CO2 emissions year wise by all countries in descending order viz</h3>
             </div>
         </div>
     </div>

@@ -6,10 +6,14 @@ const window_dims = {
 };
 const svgWidth = window_dims.width / 2;
 const svgHeight = window_dims.width / 3;
+const legendWidth = 200;
+const legendHeight = 20;
 
 const World_map = "./data/world_data.geojson";
 const emissions = "./data/emissions_processed.csv";
 const yearSlider = d3.select('#yearSlider');
+const countryHeading = d3.select('#countryHeading');
+const bar = d3.select('#chart');
 const animateButton = d3.select('#animateButton');
 
 try {
@@ -62,6 +66,46 @@ try {
                     );
             });
 
+            const maxValue = d3.max(geo_data.features, d => d['properties']['emission_data'][year]);
+
+            const legendSvg = container.append('svg')
+                .attr('width', legendWidth)
+                .attr('height', legendHeight)
+                .style('position', 'absolute')
+                .style('left', '280px')
+                .style('top', `${height + 260}px`);
+
+            // Create a gradient for the legend
+            legendSvg.append('defs')
+                .append('linearGradient')
+                .attr('id', 'legendGradient')
+                .attr('x1', '0%')
+                .attr('x2', '100%')
+                .selectAll('stop')
+                .data(d3.range(0, 1.1, 0.1))
+                .enter().append('stop')
+                .attr('offset', d => (d * 100) + '%')
+                .attr('stop-color', d => colorInterpolator(linearScale(d * maxValue))); // Adjust 'maxValue' based on your data
+
+            // Draw the rectangle for the legend
+            legendSvg.append('rect')
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('width', legendWidth)
+                .attr('height', legendHeight)
+                .style('fill', 'url(#legendGradient)');
+
+            // Add text for legend labels
+            const legendLabels = ['Low', 'High']; // Modify these labels based on your data
+            legendSvg.selectAll('.legendLabel')
+                .data(legendLabels)
+                .enter().append('text')
+                .attr('class', 'legendLabel')
+                .attr('x', (d, i) => i * '250px')
+                .attr('y', `${height + 210}px`)
+                .text(d => d)
+                .style('text-anchor', 'middle');
+
             const tooltip = d3.select("#tooltip_1");
 
             svg.selectAll("path")
@@ -99,7 +143,15 @@ try {
             const tooltip = d3.select("#tooltip_1");
             
             d3.selectAll("path")
-                .attr("fill", d => colorInterpolator(linearScale(d['properties']['emission_data'][year])))
+                .attr("fill", d => {
+                    if (d && d.properties && d.properties.emission_data && d.properties.emission_data[year]) {
+                        return colorInterpolator(linearScale(d.properties.emission_data[year]));
+                    } else {
+                        // Handle the case where the data or property is null
+                        console.log(d);
+                        return '#e0f3f8'; // or any other default color
+                    }
+                })
                 .on("mouseenter", (m, d) => {
                     tooltip.transition()
                         .duration(200)
@@ -118,12 +170,97 @@ try {
                 });
         }
 
+        function updateBar(year,emissionData){
+            const filteredData = emissionData.filter(d => +d.Year === year && +d['CO2 emission (Tons)'] !== 0);
+            filteredData.sort((a, b) => b['CO2 emission (Tons)'] - a['CO2 emission (Tons)']);
+            const top10Data = filteredData.slice(0, 10);
+
+            const margin = { top: 40, right: 20, bottom: 60, left: 5 };
+
+            bar.selectAll('*').remove();
+            const chart = bar.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+            
+            const maxCO2 = d3.max(top10Data, d => +d['CO2 emission (Tons)']);
+            const numberOfValues = top10Data.length;
+            const width = 400;
+
+            let height;
+            if (numberOfValues <= 2) {
+                height = 50;
+            } else if (numberOfValues == 3) {
+                height = 100;
+            } else if (numberOfValues >= 4 && numberOfValues < 6) {
+                height = 250;
+            } else if (numberOfValues >= 6 && numberOfValues < 9) {
+                height = 350;
+            } else {
+                height = 350;
+            }
+
+            const x = d3.scaleLinear()
+                .domain([0, maxCO2])
+                .range([0, width]);
+  
+            const y = d3.scaleBand()
+                .domain(top10Data.map(d => d.Country))
+                .range([0, height])
+                .padding(0.1);
+  
+            const color = d3.scaleOrdinal(d3.schemeCategory10);
+  
+            chart.selectAll('.bar')
+                .data(top10Data)
+                .enter().append('rect')
+                .attr('class', 'bar')
+                .attr('x', 0)
+                .attr('y', d => y(d.Country))
+                .attr('width', d => x(+d['CO2 emission (Tons)']))
+                .attr('height', y.bandwidth())
+                .attr('fill', d => color(d.Country));
+ 
+            let labelCondition;
+            if (year >= 1898 && year <= 1935) {
+                labelCondition = 2; // Use the different label condition for the specified years
+            } else {
+                labelCondition = 1; // Default label condition
+            }    
+            
+            chart.selectAll('.label')
+                .data(top10Data)
+                .enter().append('text')
+                .attr('class', 'label')
+                .attr('x', d => {
+                if (top10Data.indexOf(d) < labelCondition) {
+                    return x(+d['CO2 emission (Tons)']) - 5;
+                } else {
+                    return x(+d['CO2 emission (Tons)']) + 5;
+                }
+                })
+                .attr('y', d => y(d.Country) + y.bandwidth() / 2)
+                .attr('dy', '0.35em')
+                .attr('fill', 'black')
+                .style('font-size', '12px')
+                .style('font-family', 'Arial')
+                .attr('text-anchor', d => (top10Data.indexOf(d) < labelCondition) ? 'end' : 'start')
+                .text(d => `${d.Country}: ${d['CO2 emission (Tons)']} Tons`);
+  
+            chart.append('g')
+                .call(d3.axisLeft(y));
+            
+            bar.attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .style('overflow', 'auto');
+        }
+
         yearSlider.on('input', () => {
             currentYear = +yearSlider.property('value');
+            countryHeading.text(`CO2 emissions by top-10 countries in ${currentYear}`);
+            updateBar(currentYear,emissions_data);
             updateMap(currentYear);
         });
 
-        function animateMap() {
+        function animate() {
             if (animationRunning) {
                 clearInterval(interval);
                 animationRunning = false;
@@ -133,6 +270,8 @@ try {
                 currentYear = startYear;
                 interval = setInterval(() => {
                     if (currentYear <= endYear) {
+                        countryHeading.text(`CO2 emissions by top-10 countries in ${currentYear}`);
+                        updateBar(currentYear,emissions_data);
                         updateMap(currentYear);
                         yearSlider.property('value', currentYear);
                         currentYear++;
@@ -148,6 +287,9 @@ try {
             else {
                 interval = setInterval(() => {
                     if (currentYear <= endYear) {
+                        countryHeading.text(`CO2 emissions by top-10 countries in ${currentYear}`);
+                        updateBar(currentYear,emissions_data);
+                        updateBar(currentYear,emissions_data);
                         updateMap(currentYear);
                         yearSlider.property('value', currentYear);
                         currentYear++;
@@ -162,9 +304,10 @@ try {
             }
         }
         animationRunning = false;
-        animateButton.on('click', animateMap);
+        animateButton.on('click', animate);
 
         generateMap(geojson_data, '.map', svgWidth, svgHeight, currentYear);
+        updateBar(currentYear,emissions_data);
     });
 } catch (error) {
     console.error("An error occurred:", error);
