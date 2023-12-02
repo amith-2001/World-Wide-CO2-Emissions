@@ -41,6 +41,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     trigger: 'axis',
                     axisPointer: {
                         type: 'cross'
+                    },
+                    formatter: function (params) {
+                        var tooltip = 'Year: ' + params[0].name + '<br/>'; // Year
+            
+                        // Iterate over each data point in the tooltip
+                        params.forEach(function (item) {
+                            tooltip += 'CO2 emitted (tons): ' + formatYAxisLabel(item.value) + '<br/>';
+                        });
+            
+                        return tooltip;
                     }
                 },
                 xAxis: {
