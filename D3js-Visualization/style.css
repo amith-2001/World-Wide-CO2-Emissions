@@ -123,3 +123,17 @@ path:hover {
     stroke: black;
     stroke-width: 4px;
 }
+
+
+
+.tooltio_viz3 {
+    position: absolute;
+    text-align: center;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+}

@@ -1,3 +1,4 @@
+// Load GeoJSON data
 fetch('/D3js-Visualization/data/world_data.geojson')
     .then(response => response.json())
     .then(geoData => {
@@ -104,10 +105,32 @@ function updateChart(selectedCountry, geoData, colorScale) {
         .x((d, i) => xScale(years[i]))
         .y(d => yScale(d));
 
+    // Create a tooltip element
+    var tooltip = d3.select("body")
+    .append("div")
+    .attr("class", "tooltio_viz3")
+    .style("opacity", 0);
+
+
     svg.append("path")
         .datum(emissions)
         .attr("fill", "none")
         .attr("stroke", colorScale(selectedCountry))
         .attr("stroke-width", 2)
-        .attr("d", line);
+        .attr("d", line)
+        .on("mouseover", function (event, d) {
+            // Show the tooltip on mouseover
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", .9);
+            tooltip.html(selectedCountry + "<br/>" + "Year: " + years[event])
+                .style("left", (event.pageX + 5) + "px")
+                .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mouseout", function (d) {
+            // Hide the tooltip on mouseout
+            tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
 }
