@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="./libs/d3.js"></script>
     <script src="./libs/d3jstopojson.v1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <title>World Map Viz</title>
 </head>
@@ -31,14 +32,23 @@
             <button id="animateButton">Animate</button>
         </div>
         <div class="viz_container">
-            <div class="eachCountry">
-                <h3>This is each country trend viz</h3>
-            </div>
+            
+                <div class="controls">
+                    <label for="countrySelect">Select Country:</label>
+                    <select id="countrySelect"></select>
+                    <button id="submitButton">Submit</button>
+                </div>
+                <div class="eachCountry">
+                    <div id="chartContainer"></div>
+                </div>
+            
             <div class="worldTrend">
-                <h3>This is total world CO2 emissions viz</h3>
+                <div id="worldEmissionsChart" style="width: 800px; height: 600px;"></div>
             </div>
         </div>
     </div>
     <script src="index.js"></script>
+    <script src="each_country.js"></script>
+    <script src="total_world.js"></script>
 </body>
 </html>
