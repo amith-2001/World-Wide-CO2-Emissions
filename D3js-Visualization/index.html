@@ -11,7 +11,6 @@
 </head>
 <body>
     <div class="container">
-        <div class="tooltio_viz3"></div>
         <div class="header">
             <h1 class="heading1">CO2 Emissions World Wide</h1>
             <h3 class="heading2">A project by Rahul Manjunath and Amith Ramaswamy</h3>
@@ -32,24 +31,21 @@
             <input type="number" id="yearSlider" min="1750" max="2020" value="1750" step="1">
             <button id="animateButton">Animate</button>
         </div>
-        <div class="viz_container">
-            
-                <div class="controls">
-                    <label for="countrySelect">Select Country:</label>
-                    <select id="countrySelect"></select>
-                    <button id="submitButton">Submit</button>
-                </div>
-                <div class="eachCountry">
-                    <div id="chartContainer"></div>
-                </div>
-            
-            <div class="worldTrend">
-                <div id="worldEmissionsChart" style="width: 800px; height: 600px;"></div>
+        <div class="viz_container_2">
+            <div class="eachCountry" style="height: 600px; width: 1000px;">
+                <h3 style="text-align: center;">CO2 Emission Trend in Each Country</h3>
+                <label for="countrySelect">Select Country:</label>
+                <select id="countrySelect"></select>
+                <div id="echartsContainer" style="height: 500px;"></div>
+            </div>
+            <div class="worldTrend" style="height: 600px; width: 1000px;">
+                <h3 style="text-align: center;">Total World CO2 Emissions Over the Years</h3>
+                <div id="worldEmissionsChart" style="height: 500px;"></div>
             </div>
         </div>
     </div>
-    <script src="index.js"></script>
-    <script src="each_country.js"></script>
-    <script src="total_world.js"></script>
+    <script src="./src/animate.js"></script>
+    <script src="./src/each_country.js"></script>
+    <script src="./src/total_world.js"></script>
 </body>
 </html>

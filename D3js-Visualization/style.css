@@ -37,6 +37,12 @@
     align-items: center;
 }
 
+.viz_container_2{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .chloro, .eachCountry, .worldTrend, .eachYear {
     border: 1px solid #333;
     padding: 10px;
@@ -63,8 +69,8 @@
 }
 
 .chloro, .eachYear {
-  min-width: 700px; /* Adjust this value as needed */
-  min-height: 700px; /* Adjust this value as needed */
+    width: 700px; /* Adjust this value as needed */
+    height: 700px; /* Adjust this value as needed */
 }
 
 #countryHeading{
@@ -122,18 +128,4 @@ path:hover {
     opacity: .75;
     stroke: black;
     stroke-width: 4px;
-}
-
-
-
-.tooltio_viz3 {
-    position: absolute;
-    text-align: center;
-    padding: 2px;
-    font: 12px sans-serif;
-    background: lightsteelblue;
-    border: 0;
-    border-radius: 8px;
-    pointer-events: none;
-    opacity: 0;
 }

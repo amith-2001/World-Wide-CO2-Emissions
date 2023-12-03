@@ -34,8 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // Set options
             var options = {
                 title: {
-                    text: 'Total World CO2 Emissions Over the Years',
-                    left: 'center'
                 },
                 tooltip: {
                     trigger: 'axis',
