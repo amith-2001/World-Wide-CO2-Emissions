@@ -121,15 +121,18 @@ try {
 
             const tooltip = d3.select("#tooltip_1");
 
-
-
-
             svg.selectAll("path")
                 .data(geo_data.features)
                 .enter()
                 .append("path")
                 .attr("d", d => geoPath_generator(d))
                 .attr("fill", d => colorInterpolator(linearScale(d['properties']['emission_data'][year])))
+                .on("click", (m,d) => {
+                    // Dispatch a custom event when a country is clicked
+                    const countryName = d.properties.name;
+                    const countryClickEvent = new CustomEvent('countryClicked', { detail: { country: countryName } });
+                    document.dispatchEvent(countryClickEvent);
+                  })
                 .on("mouseenter", (m, d) => {
                     tooltip.transition()
                         .duration(200)
@@ -186,11 +189,7 @@ try {
                 });
         }
 
-
-
-
         // 2nd viz
-
         function updateBar(year,emissionData){
             const filteredData = emissionData.filter(d => +d.Year === year && +d['CO2 emission (Tons)'] !== 0);
             filteredData.sort((a, b) => b['CO2 emission (Tons)'] - a['CO2 emission (Tons)']);

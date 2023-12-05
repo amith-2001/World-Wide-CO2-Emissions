@@ -1,38 +1,46 @@
-fetch("/D3js-Visualization/data/world_data.geojson")
-    .then((response) => response.json())
-    .then((geoData) => {
-    // Extract unique country names
-        var countryNames = geoData.features.map((d) => d.properties.name);
+document.addEventListener('DOMContentLoaded', function() {
+    fetch("/D3js-Visualization/data/world_data.geojson")
+        .then((response) => response.json())
+        .then((geoData) => {
+        // Extract unique country names
+            var countryNames = geoData.features.map((d) => d.properties.name);
 
-    // Check if the select element exists in the HTML
-        var select = document.getElementById("countrySelect");
+        // Check if the select element exists in the HTML
+            var select = document.getElementById("countrySelect");
 
-        if (select) {
-        // Populate the dropdown menu
-            countryNames.forEach(function (country) {
-                var option = document.createElement("option");
-                option.text = country;
-                select.add(option);
-            });
+            if (select) {
+            // Populate the dropdown menu
+                countryNames.forEach(function (country) {
+                    var option = document.createElement("option");
+                    option.text = country;
+                    select.add(option);
+                });
 
-      // Set initial country selection to Fiji
-            var initialCountry = "Fiji";
-            select.value = initialCountry;
+        // Set initial country selection to Fiji
+                var initialCountry = "Fiji";
+                select.value = initialCountry;
 
-            // Call updateChart once data is loaded
-            updateChart(initialCountry, geoData);
+                // Call updateChart once data is loaded
+                updateChart(initialCountry, geoData);
 
-            // Add event listener for dropdown change
-            select.addEventListener("change", function () {
-                var selectedCountry = this.value;
-                updateChart(selectedCountry, geoData);
-            });
-        }
-        else {
-            console.error("Dropdown element with ID 'countrySelect' not found.");
-        }
-    })
-.catch((error) => console.error("Error fetching GeoJSON file:", error));
+                // Add event listener for dropdown change
+                select.addEventListener("change", function () {
+                    var selectedCountry = this.value;
+                    updateChart(selectedCountry, geoData);
+                });
+
+                document.addEventListener('countryClicked', function(event) {
+                    const selectedCountry = event.detail.country;
+                    select.value = selectedCountry;
+                    updateChart(selectedCountry, geoData); // Call the function to update the chart with the selected country
+                });
+            }
+            else {
+                console.error("Dropdown element with ID 'countrySelect' not found.");
+            }   
+        })
+    .catch((error) => console.error("Error fetching GeoJSON file:", error));
+}); 
 
 function updateChart(selectedCountry, geoData) {
   // Extract emission data for the selected country
