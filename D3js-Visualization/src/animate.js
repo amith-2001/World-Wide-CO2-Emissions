@@ -54,59 +54,75 @@ try {
                     return d['properties']['emission_data'][year]
                 }))
             
-            container.on('wheel', (event) => {
-                const cursor = d3.pointer(event);
-                const [x, y] = cursor;
+                let isDragging = false;
+                let startX, startY;
                 
-                svg.transition()
-                    .duration(500)
-                    .call(zoom.transform, d3.zoomIdentity
-                        .scale(event.deltaY > 0 ? 0.8 : 1.2)
-                        .translate(x, y)
-                    );
-            });
+                container.on('mousedown', (event) => {
+                    isDragging = true;
+                    const cursor = d3.pointer(event);
+                    [startX, startY] = cursor;
+                });
+                
+                container.on('mousemove', (event) => {
+                    if (!isDragging) return;
+                
+                    const cursor = d3.pointer(event);
+                    const [x, y] = cursor;
+                
+                    svg.call(zoom.transform, d3.zoomIdentity.translate(x - startX, y - startY));
+                });
+                
+                container.on('mouseup', () => {
+                    isDragging = false;
+                });
+                
 
             const maxValue = d3.max(geo_data.features, d => d['properties']['emission_data'][year]);
 
             const legendSvg = container.append('svg')
-                .attr('width', legendWidth)
-                .attr('height', legendHeight)
-                .style('position', 'absolute')
-                .style('left', '280px')
-                .style('top', `${height + 260}px`);
+            .attr('id', 'legendSvg') // Add an ID to the legend SVG for easy selection
+            .attr('width', legendWidth)
+            .attr('height', legendHeight)
+            .style('position', 'absolute')
+            .style('left', '280px')
+            .style('top', `${height + 260}px`);
+    
 
             // Create a gradient for the legend
             legendSvg.append('defs')
-                .append('linearGradient')
-                .attr('id', 'legendGradient')
-                .attr('x1', '0%')
-                .attr('x2', '100%')
-                .selectAll('stop')
-                .data(d3.range(0, 1.1, 0.1))
-                .enter().append('stop')
-                .attr('offset', d => (d * 100) + '%')
-                .attr('stop-color', d => colorInterpolator(linearScale(d * maxValue))); // Adjust 'maxValue' based on your data
+            .append('linearGradient')
+            .attr('id', 'legendGradient')
+            .attr('x1', '0%')
+            .attr('x2', '100%')
+            .selectAll('stop')
+            .data(d3.range(0, 1.1, 0.1))
+            .enter().append('stop')
+            .attr('offset', d => (d * 100) + '%')
+            .attr('stop-color', d => colorInterpolator(linearScale(d * maxValue))); // Adjust 'maxValue' based on your data
 
             // Draw the rectangle for the legend
             legendSvg.append('rect')
-                .attr('x', 0)
-                .attr('y', 0)
-                .attr('width', legendWidth)
-                .attr('height', legendHeight)
-                .style('fill', 'url(#legendGradient)');
-
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', legendWidth)
+            .attr('height', legendHeight)
+            .style('fill', 'url(#legendGradient)');
+    
             // Add text for legend labels
             const legendLabels = ['Low', 'High']; // Modify these labels based on your data
             legendSvg.selectAll('.legendLabel')
                 .data(legendLabels)
                 .enter().append('text')
                 .attr('class', 'legendLabel')
-                .attr('x', (d, i) => i * '250px')
+                .attr('x', (d, i) => i * 250)
                 .attr('y', `${height + 210}px`)
                 .text(d => d)
                 .style('text-anchor', 'middle');
 
             const tooltip = d3.select("#tooltip_1");
+
+
+
 
             svg.selectAll("path")
                 .data(geo_data.features)
@@ -169,6 +185,11 @@ try {
                         .style("opacity", 0)
                 });
         }
+
+
+
+
+        // 2nd viz
 
         function updateBar(year,emissionData){
             const filteredData = emissionData.filter(d => +d.Year === year && +d['CO2 emission (Tons)'] !== 0);
