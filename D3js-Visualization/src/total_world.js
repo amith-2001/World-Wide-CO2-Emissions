@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Fetch the CSV file
-    fetch('/D3js-Visualization/data/emissions_processed.csv')
+    fetch('https://rahulmanjunath.github.io/World-Wide-CO2-Emissions/D3js-Visualization/data/emissions_processed.csv')
         .then(response => response.text())
         .then(csvData => {
             // Parse CSV data and extract relevant information
