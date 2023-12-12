@@ -8,6 +8,10 @@
     <script src="./libs/echarts.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <title>World Map Viz</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.1.2/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
     <div class="container">
@@ -42,10 +46,19 @@
                 <h3 style="text-align: center;">Total World CO2 Emissions Over the Years</h3>
                 <div id="worldEmissionsChart" style="height: 500px;"></div>
             </div>
+
+            <div class="countryTrend" style="height: 600px; width: 1000px;">
+                <h3 style="text-align: center;">Top 20 Countries Cumulative CO2 Emissions</h3>
+                <div id="countryEmissionsChart" style="height: 500px;"></div>
+                <div id="yearSlide"></div>
+                <p id="selectedYearRange" style="text-align: center;"></p>
+            </div>
+            
         </div>
     </div>
     <script src="./src/animate.js"></script>
     <script src="./src/each_country.js"></script>
     <script src="./src/total_world.js"></script>
+    <script src="./src/all_country.js"></script>
 </body>
 </html>

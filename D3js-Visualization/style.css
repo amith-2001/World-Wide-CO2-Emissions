@@ -43,7 +43,7 @@
     align-items: center;
 }
 
-.chloro, .eachCountry, .worldTrend, .eachYear {
+.chloro, .eachCountry, .worldTrend, .eachYear, .countryTrend {
     border: 1px solid #333;
     padding: 10px;
     margin: 10px;
