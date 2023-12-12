@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    fetch("/D3js-Visualization/data/world_data.geojson")
+    fetch("https://rahulmanjunath.github.io/World-Wide-CO2-Emissions/D3js-Visualization/data/world_data.geojson")
         .then((response) => response.json())
         .then((geoData) => {
         // Extract unique country names

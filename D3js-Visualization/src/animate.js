@@ -9,8 +9,8 @@ const svgHeight = window_dims.width / 3;
 const legendWidth = 200;
 const legendHeight = 20;
 
-const World_map = "./data/world_data.geojson";
-const emissions = "./data/emissions_processed.csv";
+const World_map = "https://rahulmanjunath.github.io/World-Wide-CO2-Emissions/D3js-Visualization/data/world_data.geojson";
+const emissions = "https://rahulmanjunath.github.io/World-Wide-CO2-Emissions/D3js-Visualization/data/emissions_processed.csv";
 const yearSlider = d3.select('#yearSlider');
 const countryHeading = d3.select('#countryHeading');
 const bar = d3.select('#chart');
@@ -169,8 +169,7 @@ try {
                         return colorInterpolator(linearScale(d.properties.emission_data[year]));
                     } else {
                         // Handle the case where the data or property is null
-                        console.log(d);
-                        return '#e0f3f8'; // or any other default color
+                        return '#e0f3f8';
                     }
                 })
                 .on("mouseenter", (m, d) => {
